@@ -1,0 +1,13 @@
+{
+  "name": "awwfy-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Awwfy Studios website. Plain HTML, CSS and JavaScript, no build step.",
+  "scripts": {
+    "start": "node tests/server.mjs",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "devDependencies": {
+    "playwright": "1.63.0"
+  }
+}

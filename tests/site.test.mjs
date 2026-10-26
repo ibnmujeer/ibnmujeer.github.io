@@ -85,7 +85,7 @@ test("home page renders every section without errors", async () => {
   await p.goto(base);
   await p.waitForLoadState("networkidle");
   for (const id of ["top", "showcase", "valence", "why", "library", "contact"]) assert.ok(await p.isVisible(`#${id}`), `#${id} visible`);
-  assert.match(await p.textContent("h1"), /concept is the rule/i);
+  assert.match(await p.textContent("h1"), /Interactive Science Games/i);
   assert.equal(await p.getAttribute(".logo img", "alt"), "Awwfy Studios");
   assert.match(await p.textContent("footer"), /Let's make\s*learning\s*click\./i);
   assert.match(await p.textContent("footer"), /hello@awwfy\.com/);
@@ -172,14 +172,19 @@ test("phone: no sideways page scroll and the game row swipes", async () => {
   await p.context().close();
 });
 
-test("Get early access scrolls to the contact footer", async () => {
+test("form links point to the three Google Forms and open in a new tab", async () => {
   const p = await page();
   await p.goto(base);
-  await p.click("#valCta");
-  await p.waitForTimeout(1200);
-  const inView = await p.evaluate(() => { const r = document.getElementById("contact").getBoundingClientRect(); return r.top < innerHeight && r.bottom > 0; });
-  assert.ok(inView, "footer is on screen");
-  assert.ok(await p.evaluate(() => document.getElementById("early").classList.contains("flash")));
+  const expect = {
+    valCta: "https://forms.gle/tFrTPmWRn5QRFe6PA", formEarly: "https://forms.gle/tFrTPmWRn5QRFe6PA",
+    formContact: "https://forms.gle/ygbbGD3YRUBCfvpC7", formFeedback: "https://forms.gle/zX5pKgFtHgmtzWUu8"
+  };
+  for (const id of Object.keys(expect)) {
+    assert.equal(await p.getAttribute("#" + id, "href"), expect[id], id);
+    assert.equal(await p.getAttribute("#" + id, "target"), "_blank", id);
+    assert.match(await p.getAttribute("#" + id, "rel"), /noopener/, id);
+  }
+  assert.match(await p.getAttribute("#mailHello", "href"), /^mailto:hello@awwfy\.com/);
   await p.context().close();
 });
 
@@ -224,7 +229,7 @@ test("works offline after the first visit", async () => {
   await p.waitForTimeout(500);
   await p.context().setOffline(true);
   await p.reload();
-  assert.match(await p.textContent("h1"), /concept is the rule/i, "home page opens offline");
+  assert.match(await p.textContent("h1"), /Interactive Science Games/i, "home page opens offline");
   await p.goto(base + "a-game-never-opened/");
   assert.match(await p.textContent("h1"), /offline/i, "offline page for pages never visited");
   await p.context().setOffline(false);
@@ -239,15 +244,19 @@ test("manifest makes the site installable", async () => {
 });
 
 /* ---------- plans ---------- */
-test("plans section renders three plans, the custom game strip and the small print", async () => {
+test("pilot section renders the pilot card, the custom game strip and the small print", async () => {
   const p = await page();
   await p.goto(base);
   assert.equal(await p.textContent("#plansH"), C.plans.heading);
-  assert.equal(await p.locator("#planGrid .plan").count(), 3);
+  assert.equal(await p.locator("#planGrid .plan").count(), 1);
   const text = await p.textContent("#plans");
-  for (const c of C.plans.cards) { assert.ok(text.includes(c.price), `price ${c.price}`); assert.ok(text.includes(c.name), `plan ${c.name}`); }
-  assert.match(await p.getAttribute("#customCta", "href"), /^mailto:hello@awwfy\.com/);
-  assert.equal((await p.textContent("#planFine")).trim(), C.plans.smallPrint);
+  for (const c of C.plans.cards) { assert.ok(text.includes(c.name), `card ${c.name}`); }
+  assert.ok(!/US\$/.test(text), "no prices shown");
+  assert.ok(!/payment is late/i.test(text), "old late payment line is gone");
+  assert.equal(await p.getAttribute("#pilotCta", "href"), "https://forms.gle/ygbbGD3YRUBCfvpC7", "school button opens the contact form");
+  assert.equal(await p.getAttribute("#pilotCta", "target"), "_blank");
+  assert.equal(await p.getAttribute("#customCta", "href"), "https://forms.gle/ygbbGD3YRUBCfvpC7", "custom strip opens the contact form");
+  assert.ok(!/late fees/i.test(text), "no late fee line");
   const order = await p.evaluate(() => { const ids = [...document.querySelectorAll("main > section, footer")].map((e) => e.id); return [ids.indexOf("library"), ids.indexOf("plans")]; });
   assert.ok(order[1] === order[0] + 1, "plans sits right after the library");
   const footerAfter = await p.evaluate(() => document.getElementById("plans").compareDocumentPosition(document.getElementById("contact")) & Node.DOCUMENT_POSITION_FOLLOWING);
@@ -256,20 +265,7 @@ test("plans section renders three plans, the custom game strip and the small pri
   await p.context().close();
 });
 
-test("plans: cards in a row on a laptop, stacked on a phone", async () => {
-  const p = await page();
-  await p.goto(base);
-  const tops = await p.$$eval("#planGrid .plan", (els) => els.map((e) => Math.round(e.getBoundingClientRect().top)));
-  assert.equal(new Set(tops).size, 1, "same row on laptop");
-  await p.context().close();
-  const m = await page({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
-  await m.goto(base);
-  const t2 = await m.$$eval("#planGrid .plan", (els) => els.map((e) => Math.round(e.getBoundingClientRect().top)));
-  assert.ok(t2[0] < t2[1] && t2[1] < t2[2], "stacked on phone");
-  await m.context().close();
-});
-
-test("header ( Plans ) link scrolls to the plans section", async () => {
+test("header ( Pilot ) link scrolls to the plans section", async () => {
   const p = await page();
   await p.goto(base);
   await p.click(".top nav a[href='#plans']");
@@ -284,7 +280,7 @@ test("with reduced motion, plans show at once without animation", async () => {
   await p.goto(base);
   await p.evaluate(() => document.getElementById("plans").scrollIntoView());
   const op = await p.$$eval("#planGrid .plan", (els) => els.map((e) => getComputedStyle(e).opacity));
-  assert.deepEqual(op, ["1", "1", "1"]);
+  assert.deepEqual(op, ["1"]);
   await p.context().close();
 });
 
@@ -292,9 +288,9 @@ test("with reduced motion, plans show at once without animation", async () => {
 test("search and share tags are correct", async () => {
   const p = await page();
   await p.goto(base);
-  assert.equal(await p.title(), "Awwfy Studios | Science games for schools, ages 9 to 12");
+  assert.equal(await p.title(), "Awwfy Studios | Interactive Science Games for Kids and Schools");
   assert.equal(await p.getAttribute("meta[name=description]", "content"),
-    "Science games where the concept is the rule. For classrooms, ages 9 to 12. No logins, no ads, no personal data. Works offline.");
+    "Interactive science games where the concept is the rule. Physics, chemistry, biology and space for school classrooms. Works in any browser, no installations, no setup. No logins, no ads.");
   assert.equal(await p.getAttribute("link[rel=canonical]", "href"), "https://awwfy.com/");
   assert.equal(await p.getAttribute("meta[property='og:url']", "content"), "https://awwfy.com/");
   assert.equal(await p.getAttribute("meta[property='og:site_name']", "content"), "Awwfy Studios");
@@ -307,7 +303,7 @@ test("search and share tags are correct", async () => {
   for (const x of ld["@graph"]) { assert.equal(x.name, "Awwfy Studios"); assert.equal(x.url, "https://awwfy.com/"); }
   assert.ok(ld["@graph"].find((x) => x["@type"] === "Organization").logo);
   assert.equal(await p.locator("h1").count(), 1);
-  assert.match(await p.textContent("h1"), /^Awwfy Studios: science games/);
+  assert.match(await p.textContent("h1"), /^Awwfy Studios: Interactive Science Games/);
   await p.context().close();
 });
 
@@ -334,5 +330,6 @@ test("no leftover old site name or old age range", async () => {
     const t = await readFile(join(ROOT, f), "utf8");
     assert.ok(!/awwfy arcade/i.test(t), `"awwfy Arcade" found in ${f}`);
     assert.ok(!/4 to 12/.test(t), `"4 to 12" found in ${f}`);
+    assert.ok(!/9 to 12/.test(t), `"9 to 12" found in ${f}`);
   }
 });

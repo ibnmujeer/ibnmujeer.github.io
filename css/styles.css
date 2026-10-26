@@ -167,7 +167,7 @@ button{font:inherit;color:inherit}
 .frow button[aria-pressed="true"]{background:var(--ink);color:#fff}
 .frow button[lang="ar"]{font-family:var(--arabic);font-size:13px;text-transform:none;padding:9px 16px}
 .group-h{display:flex;align-items:center;gap:18px;margin:56px 0 18px}
-.group-h:first-of-type{margin-top:0}
+#gScience .group-h{margin-top:0}
 .group-h h3{font:400 clamp(30px,4vw,52px)/1 var(--display);text-transform:uppercase;margin:0}
 .group-h p{margin:4px 0 0;color:var(--grey)}
 .group-h .badge{--bw:clamp(76px,7vw,100px)}
@@ -190,7 +190,7 @@ a.game:hover .go,a.game:focus-visible .go{transform:scale(1);opacity:1}
 .empty{padding:40px;border-radius:22px;background:var(--mist);text-align:center;color:var(--grey)}
 
 /* ---------- plans ---------- */
-.plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.plan-grid{display:grid;grid-template-columns:1fr;gap:18px}
 .plan{background:var(--mist);border-radius:24px;padding:28px;display:flex;flex-direction:column;transition:transform .45s var(--ease)}
 .plan:hover{transform:translateY(-6px)}
 .plan.featured{background:var(--sun)}
@@ -204,15 +204,19 @@ a.game:hover .go,a.game:focus-visible .go{transform:scale(1);opacity:1}
 .plan li{padding-left:22px;position:relative;font-size:15px}
 .plan li::before{content:"";position:absolute;left:0;top:.45em;width:10px;height:10px;border-radius:50%;background:var(--blue)}
 .plan.featured li::before{background:var(--ink)}
+.plan .ptext{margin:0 0 18px;max-width:60ch;font-size:clamp(16px,1.3vw,18px)}
+.plan .pcta{align-self:flex-start;margin-top:22px}
+.plan.featured .pill.dark{background:var(--ink);color:#fff;border-color:var(--ink)}
+.plan.featured .pill.dark:hover{background:#fff;color:var(--ink);border-color:#fff}
 .custom{margin-top:18px;background:var(--ink);color:#fff;border-radius:24px;padding:clamp(22px,3vw,34px);display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
 .custom p{margin:0;font:800 clamp(18px,1.8vw,24px)/1.3 var(--body);max-width:40ch}
 .custom .pill.dark{background:var(--sun);border-color:var(--sun);color:var(--ink);white-space:normal}
 .custom .pill.dark:hover{background:#fff;border-color:#fff}
 .fine{margin:16px 4px 0;font:400 12px/1.6 var(--mono);text-transform:uppercase;color:var(--grey)}
-.plans{padding-top:0}
+.plans{padding-top:0;padding-bottom:clamp(8px,2vw,24px)}
 
 /* ---------- footer ---------- */
-footer{background:var(--ink);color:#fff;padding:clamp(48px,7vw,90px) var(--gut) 28px;border-radius:28px 28px 0 0;margin-top:clamp(40px,6vw,80px)}
+footer{background:var(--ink);color:#fff;padding:clamp(48px,7vw,90px) var(--gut) 28px;border-radius:28px 28px 0 0;margin-top:clamp(28px,4vw,52px)}
 .contact{display:flex;justify-content:space-between;align-items:center;gap:30px;flex-wrap:wrap}
 .fbig{font:400 clamp(60px,11vw,180px)/.85 var(--display);text-transform:uppercase;margin:0 0 clamp(36px,5vw,64px)}
 .fbig span{color:var(--sun)}
@@ -221,11 +225,14 @@ footer{background:var(--ink);color:#fff;padding:clamp(48px,7vw,90px) var(--gut) 
 .contact .early.flash{animation:flash 1.6s var(--ease) 2}
 @keyframes flash{0%,100%{background:transparent}50%{background:rgba(253,199,51,.18)}}
 .contact p{color:#B9C0CC;margin:0 0 18px;max-width:46ch;font-size:clamp(16px,1.4vw,19px)}
+.fcta{display:flex;flex-wrap:wrap;gap:12px;margin:6px 0 20px}
+.contact .orMail{margin:0;color:#B9C0CC}
 .mail{font:800 clamp(24px,3.4vw,48px)/1.1 var(--body);color:var(--sun);text-decoration:none;border-bottom:3px solid transparent;transition:border-color .3s,color .3s;word-break:break-word}
 .mail:hover{border-color:var(--sun)}
 .contact .badge{--bw:clamp(150px,18vw,240px)}
 .fbar{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:48px;padding-top:22px;border-top:1px solid #2a2b30;font:400 12px var(--mono);text-transform:uppercase;color:#8d929b}
 .fbar a{color:#fff}
+.fcount{margin:14px 0 0;font:400 12px var(--mono);text-transform:uppercase;color:#8d929b}
 .fbar .brand{display:flex;align-items:center;gap:10px}
 .fbar .brand img{width:22px;height:22px}
 

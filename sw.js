@@ -1,7 +1,7 @@
 /* Awwfy Studios service worker.
    Makes the website open offline, and lets games that were opened before still open offline.
    When you change the website, raise VERSION by one (v2, v3...) so phones pick up the new files. */
-var VERSION = "v2";
+var VERSION = "v7";
 var HUB = "awwfy-hub-" + VERSION;
 var GAMES = "awwfy-games-" + VERSION;
 

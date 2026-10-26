@@ -38,8 +38,8 @@ Open `js/content.js` in any text editor (Notepad works, VS Code is nicer).
 **Other common edits**
 - Change the featured phone row: edit the `showcase` list (game ids, in order).
 - Make Valence playable: in the `science` list, remove `soon: true` from Valence. In `valence`, change `status` and `cta`.
-- Change plans, prices or the custom game strip: edit `plans`.
-- Change emails: edit `contact`.
+- Change the pilot text, button or custom game strip: edit `plans` (the section is the pilot card).
+- Change emails: edit `contact`. Change Google Form links: edit `forms`.
 - A game hosted somewhere else (for example Netlify): add `url: "https://..."` to that game.
 
 Keep writing without em-dashes. The tests check for them.
@@ -62,7 +62,7 @@ Opening `index.html` by double-clicking also works, but the moving hero bunny an
 npm test
 ```
 
-There are 23 checks:
+There are 22 checks:
 - no em-dashes
 - every game has a screenshot, and every file the pages use exists
 - every section renders with no errors
@@ -71,12 +71,12 @@ There are 23 checks:
 - header links and keyboard navigation work
 - the subject and language filters work, including the "no games" message
 - the phone row moves only with the scroll on a laptop and swipes on a phone
-- "Get early access" takes you to the contact footer
+- the three Google Form links are correct and open in a new tab
 - missing screenshots and failed videos fall back neatly
 - the 404 page works
 - the site works offline
 - the site is installable
-- the plans section renders, sits in a row on laptops and stacks on phones, and the header link reaches it
+- the pilot section renders, its button opens the contact form, no prices show, and the header link reaches it
 - the search title, description, share tags, structured data, favicon, robots.txt and sitemap are correct
 
 ## Put it live on GitHub (awwfy.com)

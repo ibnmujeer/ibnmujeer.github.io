@@ -57,18 +57,12 @@
   if ($("valTag")) $("valTag").textContent = V.tagline || "";
   if ($("valBlurb")) $("valBlurb").textContent = V.blurb || "";
   if ($("valStatus") && V.status) $("valStatus").textContent = "( Chapter 1 ) " + V.status;
-  /* "Get early access" scrolls to the footer and highlights the early access line */
-  if ($("valCta")) {
-    if (V.cta) $("valCta").firstChild.nodeValue = V.cta + " ";
-    $("valCta").addEventListener("click", function (ev) {
-      var t = $("contact"); if (!t) return;
-      ev.preventDefault();
-      t.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
-      var e = $("early");
-      if (e) { e.classList.remove("flash"); void e.offsetWidth; e.classList.add("flash"); }
-      if (history.replaceState) history.replaceState(null, "", "#contact");
-    });
-  }
+  /* Google Forms links (early access, contact, feedback). They open in a new tab. */
+  var F = C.forms || {};
+  [["valCta", F.early], ["formEarly", F.early], ["formContact", F.contact], ["formFeedback", F.feedback]].forEach(function (x) {
+    if ($(x[0]) && x[1]) $(x[0]).href = x[1];
+  });
+  if ($("valCta") && V.cta) $("valCta").firstChild.nodeValue = V.cta + " ";
 
   /* ---------- plans ---------- */
   var P = C.plans;
@@ -81,18 +75,20 @@
       c.className = "plan rv" + (p.featured ? " featured" : "");
       c.setAttribute("role", "listitem");
       c.innerHTML = '<p class="kicker">' + esc(p.label) + "</p><h3>" + esc(p.name) + "</h3>" +
-        '<p class="price"><b>' + esc(p.price) + "</b> <span>" + esc(p.period) + "</span></p>" +
-        "<ul>" + (p.points || []).map(function (t) { return "<li>" + esc(t) + "</li>"; }).join("") + "</ul>";
+        (p.price ? '<p class="price"><b>' + esc(p.price) + "</b> <span>" + esc(p.period || "") + "</span></p>" : "") +
+        (p.text ? '<p class="ptext">' + esc(p.text) + "</p>" : "") +
+        ((p.points || []).length ? "<ul>" + p.points.map(function (t) { return "<li>" + esc(t) + "</li>"; }).join("") + "</ul>" : "") +
+        (p.ctaText ? '<a class="pill dark pcta" id="pilotCta" href="' + esc((C.forms && C.forms.contact) || "mailto:" + (C.contact.hello || "")) + '" target="_blank" rel="noopener">' + esc(p.ctaText) + ' <span class="arr" aria-hidden="true">&rarr;</span></a>' : "");
       $("planGrid").appendChild(c);
     });
     if (P.custom) {
       if ($("customText")) $("customText").textContent = P.custom.text || "";
       if ($("customCta")) {
-        $("customCta").href = "mailto:" + (C.contact.hello || "hello@awwfy.com") + (P.custom.mailSubject ? "?subject=" + encodeURIComponent(P.custom.mailSubject) : "");
+        $("customCta").href = (C.forms && C.forms.contact) || ("mailto:" + (C.contact.hello || "hello@awwfy.com"));
+        $("customCta").target = "_blank"; $("customCta").rel = "noopener";
         if (P.custom.cta) $("customCta").firstChild.nodeValue = P.custom.cta + " ";
       }
     }
-    if (P.smallPrint && $("planFine")) $("planFine").textContent = P.smallPrint;
   }
 
   /* ---------- game cards ---------- */

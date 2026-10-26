@@ -26,6 +26,13 @@ window.AWWFY = {
     careers: "join@awwfy.com"
   },
 
+  /* Google Forms. Change a link here and the whole site follows. */
+  forms: {
+    feedback: "https://forms.gle/zX5pKgFtHgmtzWUu8",
+    early: "https://forms.gle/tFrTPmWRn5QRFe6PA",
+    contact: "https://forms.gle/ygbbGD3YRUBCfvpC7"
+  },
+
   /* Phones in the showcase row, in this order (use game ids from the lists below) */
   showcase: ["solar-system", "gravity-hopper", "periodic-fighter", "spark-lab", "beam-lab", "trait-quest"],
 
@@ -37,25 +44,20 @@ window.AWWFY = {
     cta: "Get early access"
   },
 
-  /* Plans section. Prices start on 1 July 2027; everything is free until 30 June 2027. */
+  /* Pilot section. Edit the words here. The button opens the contact form (see forms.contact). */
   plans: {
-    label: "( Plans )",
-    heading: "Free to play until 30 June 2027.",
-    intro: "Every game is free for now. Paid plans start on 1 July 2027.",
+    label: "( Pilot Access )",
+    heading: "Free classroom access for partner schools and teachers.",
+    intro: "",
     cards: [
-      { label: "( Free )", name: "Free", price: "US$0", period: "forever",
-        points: ["Maths and reading games", "No sign-up"] },
-      { label: "( Teacher or parent )", name: "Teacher or parent", price: "US$99", period: "a year from 1 July 2027",
-        points: ["All science games", "Free until then"], featured: true },
-      { label: "( School )", name: "School", price: "US$999", period: "a year from 1 July 2027",
-        points: ["All science games for every teacher and student", "Free until then"] }
+      { label: "( For schools and teachers )", name: "Join our live pilot",
+        text: "Pilot programs are live for our interactive science labs. While core foundational skills are free forever, institutional licensing for the 2027 to 2028 academic year is now open. Teachers and school admins can request early access today.",
+        ctaText: "Join the school pilot", featured: true }
     ],
     custom: {
-      text: "Need a game for a topic that is hard to teach? Order a custom game.",
-      cta: "Email hello@awwfy.com",
-      mailSubject: "Custom game request"
-    },
-    smallPrint: "No logins for children. No ads. No late fees or interest. If a payment is late, access pauses."
+      text: "Need a game for a topic that is hard to teach? Contact Us.",
+      cta: "Contact us"
+    }
   },
 
   science: [

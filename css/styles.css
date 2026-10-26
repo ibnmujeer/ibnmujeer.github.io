@@ -189,6 +189,28 @@ a.game:hover .go,a.game:focus-visible .go{transform:scale(1);opacity:1}
 .game.soon .thumb img{filter:saturate(.75) brightness(.9)}
 .empty{padding:40px;border-radius:22px;background:var(--mist);text-align:center;color:var(--grey)}
 
+/* ---------- plans ---------- */
+.plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.plan{background:var(--mist);border-radius:24px;padding:28px;display:flex;flex-direction:column;transition:transform .45s var(--ease)}
+.plan:hover{transform:translateY(-6px)}
+.plan.featured{background:var(--sun)}
+.plan.featured .kicker{color:var(--ink)}
+.plan h3{font:400 clamp(30px,3vw,44px)/1 var(--display);text-transform:uppercase;margin:0 0 18px}
+.plan .price{margin:0 0 18px;display:flex;align-items:baseline;flex-wrap:wrap;gap:8px}
+.plan .price b{font:400 clamp(48px,5vw,72px)/.9 var(--display)}
+.plan .price span{font:700 12px var(--mono);text-transform:uppercase;color:var(--grey)}
+.plan.featured .price span{color:var(--ink)}
+.plan ul{list-style:none;margin:auto 0 0;padding:16px 0 0;border-top:1px solid rgba(0,0,0,.12);display:flex;flex-direction:column;gap:8px}
+.plan li{padding-left:22px;position:relative;font-size:15px}
+.plan li::before{content:"";position:absolute;left:0;top:.45em;width:10px;height:10px;border-radius:50%;background:var(--blue)}
+.plan.featured li::before{background:var(--ink)}
+.custom{margin-top:18px;background:var(--ink);color:#fff;border-radius:24px;padding:clamp(22px,3vw,34px);display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.custom p{margin:0;font:800 clamp(18px,1.8vw,24px)/1.3 var(--body);max-width:40ch}
+.custom .pill.dark{background:var(--sun);border-color:var(--sun);color:var(--ink);white-space:normal}
+.custom .pill.dark:hover{background:#fff;border-color:#fff}
+.fine{margin:16px 4px 0;font:400 12px/1.6 var(--mono);text-transform:uppercase;color:var(--grey)}
+.plans{padding-top:0}
+
 /* ---------- footer ---------- */
 footer{background:var(--ink);color:#fff;padding:clamp(48px,7vw,90px) var(--gut) 28px;border-radius:28px 28px 0 0;margin-top:clamp(40px,6vw,80px)}
 .contact{display:flex;justify-content:space-between;align-items:center;gap:30px;flex-wrap:wrap}
@@ -220,6 +242,7 @@ footer{background:var(--ink);color:#fff;padding:clamp(48px,7vw,90px) var(--gut) 
   .side{order:2;max-width:none;justify-self:stretch;text-align:left;padding:0}
   .side.r{order:3;justify-self:stretch;text-align:left}
   .side.r .pill{display:none}
+  .plan-grid{grid-template-columns:1fr}
   .valence .vin{grid-template-columns:1fr;text-align:left;min-height:0}
   .valence .ph{justify-self:center;margin-top:10px}
   .valence .badge{left:auto;right:-16%;bottom:8%}

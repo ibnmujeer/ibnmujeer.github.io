@@ -70,6 +70,31 @@
     });
   }
 
+  /* ---------- plans ---------- */
+  var P = C.plans;
+  if (P && $("planGrid")) {
+    if (P.label && $("plansLabel")) $("plansLabel").textContent = P.label;
+    if (P.heading && $("plansH")) $("plansH").textContent = P.heading;
+    if ($("plansIntro")) { $("plansIntro").textContent = P.intro || ""; $("plansIntro").hidden = !P.intro; }
+    (P.cards || []).forEach(function (p) {
+      var c = doc.createElement("article");
+      c.className = "plan rv" + (p.featured ? " featured" : "");
+      c.setAttribute("role", "listitem");
+      c.innerHTML = '<p class="kicker">' + esc(p.label) + "</p><h3>" + esc(p.name) + "</h3>" +
+        '<p class="price"><b>' + esc(p.price) + "</b> <span>" + esc(p.period) + "</span></p>" +
+        "<ul>" + (p.points || []).map(function (t) { return "<li>" + esc(t) + "</li>"; }).join("") + "</ul>";
+      $("planGrid").appendChild(c);
+    });
+    if (P.custom) {
+      if ($("customText")) $("customText").textContent = P.custom.text || "";
+      if ($("customCta")) {
+        $("customCta").href = "mailto:" + (C.contact.hello || "hello@awwfy.com") + (P.custom.mailSubject ? "?subject=" + encodeURIComponent(P.custom.mailSubject) : "");
+        if (P.custom.cta) $("customCta").firstChild.nodeValue = P.custom.cta + " ";
+      }
+    }
+    if (P.smallPrint && $("planFine")) $("planFine").textContent = P.smallPrint;
+  }
+
   /* ---------- game cards ---------- */
   function card(g) {
     var a = doc.createElement(g.soon ? "div" : "a");

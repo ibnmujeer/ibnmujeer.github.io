@@ -1,7 +1,7 @@
 /* Awwfy Studios service worker.
    Makes the website open offline, and lets games that were opened before still open offline.
    When you change the website, raise VERSION by one (v2, v3...) so phones pick up the new files. */
-var VERSION = "v1";
+var VERSION = "v2";
 var HUB = "awwfy-hub-" + VERSION;
 var GAMES = "awwfy-games-" + VERSION;
 
@@ -12,7 +12,7 @@ var CORE = [
   "assets/fonts/inter-latin-600-normal.woff2", "assets/fonts/inter-latin-800-normal.woff2",
   "assets/fonts/space-mono-latin-400-normal.woff2", "assets/fonts/space-mono-latin-700-normal.woff2",
   "assets/img/logo.png", "assets/img/emblem.png", "assets/img/bunny-hero.webp", "assets/img/bunny-think.jpg",
-  "assets/icons/icon-192.png", "assets/icons/favicon-64.png"
+  "assets/icons/icon-192.png", "assets/icons/favicon-64.png", "favicon.ico", "icon-192.png"
 ];
 
 self.addEventListener("install", function (e) {
@@ -29,7 +29,7 @@ self.addEventListener("activate", function (e) {
 function rel(url) { return url.href.slice(self.registration.scope.length); }
 function isHub(path) {
   return path === "" || path === "index.html" || path === "offline.html" || path === "404.html" ||
-    path === "manifest.webmanifest" || /^(css|js|assets)\//.test(path);
+    path === "manifest.webmanifest" || path === "favicon.ico" || path === "icon-192.png" || /^(css|js|assets)\//.test(path);
 }
 function offline() { return caches.match("offline.html"); }
 

@@ -18,6 +18,9 @@ Plain HTML, CSS and JavaScript. No framework and no build step. It installs on p
 | `sw.js` | Service worker: makes the site and played games open offline |
 | `manifest.webmanifest` | Lets people install the site as an app |
 | `offline.html`, `404.html` | "You're offline" and "Page not found" pages |
+| `favicon.ico`, `icon-192.png` | Browser and Google search icons |
+| `robots.txt`, `sitemap.xml` | Tell search engines they may read the site, and where |
+| `assets/img/og-image.png` | Picture shown when the link is shared (1200x630) |
 | `CNAME` | Tells GitHub the site lives at awwfy.com. Do not delete |
 | `.nojekyll` | Tells GitHub to serve files as they are. Do not delete |
 | `tests/` | Automated checks and a small local web server |
@@ -35,6 +38,7 @@ Open `js/content.js` in any text editor (Notepad works, VS Code is nicer).
 **Other common edits**
 - Change the featured phone row: edit the `showcase` list (game ids, in order).
 - Make Valence playable: in the `science` list, remove `soon: true` from Valence. In `valence`, change `status` and `cta`.
+- Change plans, prices or the custom game strip: edit `plans`.
 - Change emails: edit `contact`.
 - A game hosted somewhere else (for example Netlify): add `url: "https://..."` to that game.
 
@@ -58,7 +62,7 @@ Opening `index.html` by double-clicking also works, but the moving hero bunny an
 npm test
 ```
 
-There are 16 checks:
+There are 23 checks:
 - no em-dashes
 - every game has a screenshot, and every file the pages use exists
 - every section renders with no errors
@@ -72,6 +76,8 @@ There are 16 checks:
 - the 404 page works
 - the site works offline
 - the site is installable
+- the plans section renders, sits in a row on laptops and stacks on phones, and the header link reaches it
+- the search title, description, share tags, structured data, favicon, robots.txt and sitemap are correct
 
 ## Put it live on GitHub (awwfy.com)
 
@@ -85,6 +91,12 @@ The site goes in the repository **`ibnmujeer.github.io`**, which is already conn
 6. In **Settings, then Pages**, tick **Enforce HTTPS** if it is not ticked yet.
 
 **Updating later:** upload only the changed files the same way, replacing the old ones. If you changed anything other than `content.js` or screenshots, also open `sw.js` and raise `VERSION` (for example `"v1"` to `"v2"`) so phones that installed the site pick up the change.
+
+## Google search
+
+- Title, description, share image and structured data are in the `<head>` of `index.html`.
+- After a change, ask Google to read the page again: in Google Search Console, open URL inspection, enter `https://awwfy.com/` and click Request indexing. Submit `https://awwfy.com/sitemap.xml` under Sitemaps once.
+- When you add more pages, list them in `sitemap.xml`.
 
 ## How offline works
 

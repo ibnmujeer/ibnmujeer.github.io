@@ -3,16 +3,45 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Awwfy Studios</title>
-<meta name="description" content="Science learning games for schools. Physics, chemistry, biology and space games where the concept is the rule. Free to try in any browser.">
+<title>Awwfy Studios | Science games for schools, ages 9 to 12</title>
+<meta name="description" content="Science games where the concept is the rule. For classrooms, ages 9 to 12. No logins, no ads, no personal data. Works offline.">
 <meta name="theme-color" content="#FDC733">
-<link rel="icon" href="assets/icons/favicon-64.png" type="image/png">
+<link rel="canonical" href="https://awwfy.com/">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192">
 <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
 <link rel="manifest" href="manifest.webmanifest">
-<meta property="og:title" content="Awwfy Studios">
-<meta property="og:description" content="Science games where the concept is the rule.">
-<meta property="og:image" content="https://awwfy.com/assets/icons/icon-512.png">
-<link rel="canonical" href="https://awwfy.com/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Awwfy Studios">
+<meta property="og:title" content="Awwfy Studios | Science games for schools, ages 9 to 12">
+<meta property="og:description" content="Science games where the concept is the rule. For classrooms, ages 9 to 12. No logins, no ads, no personal data. Works offline.">
+<meta property="og:url" content="https://awwfy.com/">
+<meta property="og:image" content="https://awwfy.com/assets/img/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Awwfy Studios logo">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://awwfy.com/#website",
+      "name": "Awwfy Studios",
+      "url": "https://awwfy.com/",
+      "publisher": { "@id": "https://awwfy.com/#organization" }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://awwfy.com/#organization",
+      "name": "Awwfy Studios",
+      "url": "https://awwfy.com/",
+      "logo": "https://awwfy.com/assets/icons/icon-512.png"
+    }
+  ]
+}
+</script>
 <link rel="preload" href="assets/fonts/anton-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -23,7 +52,7 @@
   <div class="in">
     <a class="logo" href="#main" aria-label="Awwfy Studios home"><img src="assets/img/logo.png" alt="Awwfy Studios" width="440" height="140"></a>
     <nav aria-label="Main">
-      <a href="#library">( Games )</a><a href="#valence">( Valence )</a><a href="#why">( Teachers )</a>
+      <a href="#library">( Games )</a><a href="#valence">( Valence )</a><a href="#why">( Teachers )</a><a href="#plans">( Plans )</a>
     </nav>
     <a class="pill dark sm" href="#library">Play now <span class="arr" aria-hidden="true">&rarr;</span></a>
   </div>
@@ -31,10 +60,8 @@
 
 <main id="main">
 <section class="hero" aria-labelledby="h1">
-  <h1 id="h1">
-    <span class="word" id="word" aria-hidden="true">Sci<span class="w2">ence</span></span>
-    <span class="sr">Awwfy Studios: science games where the concept is the rule</span>
-  </h1>
+  <div class="word" id="word" aria-hidden="true">Sci<span class="w2">ence</span></div>
+  <h1 id="h1" class="sr">Awwfy Studios: science games where the concept is the rule</h1>
   <div class="stage">
     <div class="side">
       <p><span class="star">*</span> ( Science games ) where the concept is the rule. A child cannot win without understanding the idea.</p>
@@ -133,6 +160,15 @@
   </div>
   <div class="empty" id="empty" hidden>No games match these filters yet. Try another subject or language.</div>
   <noscript><p class="empty">Turn on JavaScript to see the game library, or visit a game directly, for example <a href="https://awwfy.com/solar-system/">awwfy.com/solar-system</a>.</p></noscript>
+</section>
+<section class="wrap plans" id="plans" aria-labelledby="plansH">
+  <div class="head rv"><div><p class="kicker" id="plansLabel">( Plans )</p><h2 id="plansH">Free to play until 30 June 2027.</h2></div><p id="plansIntro"></p></div>
+  <div class="plan-grid" id="planGrid" role="list"></div>
+  <div class="custom rv">
+    <p id="customText">Need a game for a topic that is hard to teach? Order a custom game.</p>
+    <a class="pill dark" id="customCta" href="mailto:hello@awwfy.com">Email hello@awwfy.com <span class="arr" aria-hidden="true">&rarr;</span></a>
+  </div>
+  <p class="fine" id="planFine">No logins for children. No ads. No late fees or interest. If a payment is late, access pauses.</p>
 </section>
 </main>
 

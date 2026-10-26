@@ -37,6 +37,27 @@ window.AWWFY = {
     cta: "Get early access"
   },
 
+  /* Plans section. Prices start on 1 July 2027; everything is free until 30 June 2027. */
+  plans: {
+    label: "( Plans )",
+    heading: "Free to play until 30 June 2027.",
+    intro: "Every game is free for now. Paid plans start on 1 July 2027.",
+    cards: [
+      { label: "( Free )", name: "Free", price: "US$0", period: "forever",
+        points: ["Maths and reading games", "No sign-up"] },
+      { label: "( Teacher or parent )", name: "Teacher or parent", price: "US$99", period: "a year from 1 July 2027",
+        points: ["All science games", "Free until then"], featured: true },
+      { label: "( School )", name: "School", price: "US$999", period: "a year from 1 July 2027",
+        points: ["All science games for every teacher and student", "Free until then"] }
+    ],
+    custom: {
+      text: "Need a game for a topic that is hard to teach? Order a custom game.",
+      cta: "Email hello@awwfy.com",
+      mailSubject: "Custom game request"
+    },
+    smallPrint: "No logins for children. No ads. No late fees or interest. If a payment is late, access pauses."
+  },
+
   science: [
     { id: "solar-system", name: "Solar System", subject: "space", lang: "en",
       line: "Explore orbiting planets in 3D, learn NASA facts and zoom into Earth to discover countries." },

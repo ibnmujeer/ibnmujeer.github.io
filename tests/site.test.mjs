@@ -237,3 +237,102 @@ test("manifest makes the site installable", async () => {
   assert.ok(m.icons.some((i) => i.sizes === "512x512"));
   assert.ok(m.icons.some((i) => i.purpose === "maskable"));
 });
+
+/* ---------- plans ---------- */
+test("plans section renders three plans, the custom game strip and the small print", async () => {
+  const p = await page();
+  await p.goto(base);
+  assert.equal(await p.textContent("#plansH"), C.plans.heading);
+  assert.equal(await p.locator("#planGrid .plan").count(), 3);
+  const text = await p.textContent("#plans");
+  for (const c of C.plans.cards) { assert.ok(text.includes(c.price), `price ${c.price}`); assert.ok(text.includes(c.name), `plan ${c.name}`); }
+  assert.match(await p.getAttribute("#customCta", "href"), /^mailto:hello@awwfy\.com/);
+  assert.equal((await p.textContent("#planFine")).trim(), C.plans.smallPrint);
+  const order = await p.evaluate(() => { const ids = [...document.querySelectorAll("main > section, footer")].map((e) => e.id); return [ids.indexOf("library"), ids.indexOf("plans")]; });
+  assert.ok(order[1] === order[0] + 1, "plans sits right after the library");
+  const footerAfter = await p.evaluate(() => document.getElementById("plans").compareDocumentPosition(document.getElementById("contact")) & Node.DOCUMENT_POSITION_FOLLOWING);
+  assert.ok(footerAfter, "footer comes after plans");
+  assert.deepEqual(p.errors, []);
+  await p.context().close();
+});
+
+test("plans: cards in a row on a laptop, stacked on a phone", async () => {
+  const p = await page();
+  await p.goto(base);
+  const tops = await p.$$eval("#planGrid .plan", (els) => els.map((e) => Math.round(e.getBoundingClientRect().top)));
+  assert.equal(new Set(tops).size, 1, "same row on laptop");
+  await p.context().close();
+  const m = await page({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+  await m.goto(base);
+  const t2 = await m.$$eval("#planGrid .plan", (els) => els.map((e) => Math.round(e.getBoundingClientRect().top)));
+  assert.ok(t2[0] < t2[1] && t2[1] < t2[2], "stacked on phone");
+  await m.context().close();
+});
+
+test("header ( Plans ) link scrolls to the plans section", async () => {
+  const p = await page();
+  await p.goto(base);
+  await p.click(".top nav a[href='#plans']");
+  await p.waitForTimeout(800);
+  const top = await p.evaluate(() => document.getElementById("plans").getBoundingClientRect().top);
+  assert.ok(top >= -5 && top < 200, `plans near the top of the screen (top=${top})`);
+  await p.context().close();
+});
+
+test("with reduced motion, plans show at once without animation", async () => {
+  const p = await page({ reducedMotion: "reduce" });
+  await p.goto(base);
+  await p.evaluate(() => document.getElementById("plans").scrollIntoView());
+  const op = await p.$$eval("#planGrid .plan", (els) => els.map((e) => getComputedStyle(e).opacity));
+  assert.deepEqual(op, ["1", "1", "1"]);
+  await p.context().close();
+});
+
+/* ---------- search engines ---------- */
+test("search and share tags are correct", async () => {
+  const p = await page();
+  await p.goto(base);
+  assert.equal(await p.title(), "Awwfy Studios | Science games for schools, ages 9 to 12");
+  assert.equal(await p.getAttribute("meta[name=description]", "content"),
+    "Science games where the concept is the rule. For classrooms, ages 9 to 12. No logins, no ads, no personal data. Works offline.");
+  assert.equal(await p.getAttribute("link[rel=canonical]", "href"), "https://awwfy.com/");
+  assert.equal(await p.getAttribute("meta[property='og:url']", "content"), "https://awwfy.com/");
+  assert.equal(await p.getAttribute("meta[property='og:site_name']", "content"), "Awwfy Studios");
+  assert.ok(await p.getAttribute("meta[property='og:title']", "content"));
+  assert.ok(await p.getAttribute("meta[property='og:description']", "content"));
+  assert.equal(await p.getAttribute("meta[property='og:image']", "content"), "https://awwfy.com/assets/img/og-image.png");
+  const ld = JSON.parse(await p.textContent("script[type='application/ld+json']"));
+  const types = ld["@graph"].map((x) => x["@type"]);
+  assert.ok(types.includes("WebSite") && types.includes("Organization"));
+  for (const x of ld["@graph"]) { assert.equal(x.name, "Awwfy Studios"); assert.equal(x.url, "https://awwfy.com/"); }
+  assert.ok(ld["@graph"].find((x) => x["@type"] === "Organization").logo);
+  assert.equal(await p.locator("h1").count(), 1);
+  assert.match(await p.textContent("h1"), /^Awwfy Studios: science games/);
+  await p.context().close();
+});
+
+test("favicon, share image, robots.txt and sitemap.xml are valid", async () => {
+  const ico = await readFile(join(ROOT, "favicon.ico"));
+  assert.equal(ico.readUInt16LE(2), 1, "favicon.ico is an icon file");
+  const sizes = []; for (let i = 0; i < ico.readUInt16LE(4); i++) sizes.push(ico[6 + i * 16] || 256);
+  assert.ok(sizes.includes(48), "favicon.ico has a 48x48 size");
+  const pngSize = async (f) => { const b = await readFile(join(ROOT, f)); return [b.readUInt32BE(16), b.readUInt32BE(20)]; };
+  assert.deepEqual(await pngSize("icon-192.png"), [192, 192]);
+  assert.deepEqual(await pngSize("assets/img/og-image.png"), [1200, 630]);
+  const robots = await readFile(join(ROOT, "robots.txt"), "utf8");
+  assert.match(robots, /User-agent: \*/); assert.match(robots, /Allow: \//); assert.match(robots, /Sitemap: https:\/\/awwfy\.com\/sitemap\.xml/);
+  assert.ok(!/Disallow:\s*\/\s*$/m.test(robots), "robots.txt does not block the site");
+  assert.match(await readFile(join(ROOT, "sitemap.xml"), "utf8"), /<loc>https:\/\/awwfy\.com\/<\/loc>/);
+  const p = await page();
+  for (const f of ["favicon.ico", "icon-192.png", "robots.txt", "sitemap.xml"]) assert.equal((await p.goto(base + f)).status(), 200, f);
+  await p.context().close();
+});
+
+test("no leftover old site name or old age range", async () => {
+  const files = (await walk("")).filter((f) => [".html", ".js", ".css", ".json", ".webmanifest", ".md", ".txt", ".xml"].includes(extname(f)) && !f.startsWith("tests/"));
+  for (const f of files) {
+    const t = await readFile(join(ROOT, f), "utf8");
+    assert.ok(!/awwfy arcade/i.test(t), `"awwfy Arcade" found in ${f}`);
+    assert.ok(!/4 to 12/.test(t), `"4 to 12" found in ${f}`);
+  }
+});
